@@ -9,7 +9,7 @@ const passport = require('./config/passport')
 const { getUser } = require('./helpers/auth-helpers')
 const handlebarsHelpers = require('./helpers/handlebars-helpers')
 
-const routes = require('./routes')
+const { pages } = require('./routes')
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
@@ -35,7 +35,7 @@ app.use((req, res, next) => {
   res.locals.currentUser = getUser(req)
   next()
 })
-app.use(routes)
+app.use(pages)
 
 app.listen(port, () => {
   console.info(`Example app listening on port ${port}!`)
