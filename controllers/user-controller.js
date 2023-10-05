@@ -44,20 +44,22 @@ const userController = {
     const currentUser = getUser(req)
     const getUserId = Number(req.params.id)
     const editPermission = (getUserId === currentUser.id)
-    return Promise.all([
-      User.findByPk(getUserId, {
-        raw: true
-      }),
-      Comment.findAndCountAll({
-        where: { user_id: getUserId },
-        include: [Restaurant],
-        raw: true,
-        nest: true
-      })
-    ])
-      .then(([user, { count, rows }]) => {
+    return User.findByPk(getUserId, {
+      include: [
+        { model: Comment, include: Restaurant },
+        { model: Restaurant, as: 'FavoritedRestaurants' },
+        { model: User, as: 'Followings' },
+        { model: User, as: 'Followers' }
+      ],
+      nest: true
+    })
+      .then(user => {
         if (!user) throw new Error("User didn't exist!")
-        return res.render('users/profile', { user, editPermission, count, comments: rows })
+        user.toJSON()
+        return res.render('users/profile', {
+          user,
+          editPermission
+        })
       })
       .catch(err => next(err))
   },

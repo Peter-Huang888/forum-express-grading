@@ -2,13 +2,16 @@
   <div class="card mb-3">
     <div class="row g-0">
       <div class="col-md-4">
-        <img src="{{user.image}}" class="img-fluid rounded-start" alt="user-image" onload="this.style.opacity=1;">
+        <img src="{{user.dataValues.image}}" class="img-fluid rounded-start" alt="user-image" onload="this.style.opacity=1;">
       </div>
       <div class="col-md-8">
         <div class="card-body">
-          <h5 class="card-title">{{user.name}}</h5>
-          <p class="card-text">{{user.email}}</p>
-          <p class="card-text">{{count}} 已評論餐廳</p>
+          <h5 class="card-title">{{user.dataValues.name}}</h5>
+          <p class="card-text">{{user.dataValues.email}}</p>
+          <p class="card-text">{{user.Comments.length}} 已評論餐廳</p>
+          <p class="card-text">{{user.FavoritedRestaurants.length}} 收藏的餐廳</p>
+          <p class="card-text">{{user.Followings.length}} followings(追隨者)</p>
+          <p class="card-text">{{user.Followers.length}} followers(追蹤者)</p>
           {{#if editPermission}}
           <a class="edit-user btn btn-primary" href="/users/{{user.id}}/edit">edit</a>
           {{/if}}
@@ -18,17 +21,61 @@
   </div>
 </div>
 
-<div class="container mx-auto mt-5">
-  <div class="card">
-    <h5 class="card-header">
-      {{count}} 已評論餐廳
-    </h5>
-    <div class="card-body d-flex flex-wrap">
-      {{#each comments}}
-      <a href="/restaurants/{{this.Restaurant.id}}">
-        <img src="{{this.Restaurant.image}}" style="max-width: 60px" class="m-1">
-      </a>
-      {{/each}}
-      {{#ifCond count 0}} <p>目前沒有評論任何餐廳</p> {{/ifCond}}
+<div class="container mx-auto mt-5 row">
+  <div class="col-4">
+    <div class="card">
+      <h5 class="card-header">
+        {{user.Followings.length}} followings (追蹤者)
+      </h5>
+      <div class="card-body d-flex flex-wrap">
+        {{#each user.Followings}}
+        <a href="/users/{{this.dataValues.id}}">
+          <img src="{{this.dataValues.image}}" style="max-width: 60px" class="m-1">
+        </a>
+        {{/each}}
+        {{#ifCond user.Followings.length 0}} <p>目前沒有任何追蹤者</p> {{/ifCond}}
+      </div>
     </div>
+    <div class="card">
+      <h5 class="card-header">
+        {{user.Followers.length}} followers (追隨者)
+      </h5>
+      <div class="card-body d-flex flex-wrap">
+        {{#each user.Followers}}
+        <a href="/users/{{this.dataValues.id}}">
+          <img src="{{this.dataValues.image}}" style="max-width: 60px" class="m-1">
+        </a>
+        {{/each}}
+        {{#ifCond user.Followers.length 0}} <p>目前沒有任何追隨者</p> {{/ifCond}}
+      </div>
+    </div>
+  </div>
+  <div class="col-8">
+    <div class="card">
+      <h5 class="card-header">
+        {{user.Comments.length}} 已評論餐廳
+      </h5>
+      <div class="card-body d-flex flex-wrap">
+        {{#each user.Comments}}
+        <a href="/restaurants/{{this.Restaurant.dataValues.id}}">
+          <img src="{{this.Restaurant.dataValues.image}}" style="max-width: 60px" class="m-1">
+        </a>
+        {{/each}}
+        {{#ifCond user.Comments.length 0}} <p>目前沒有評論任何餐廳</p> {{/ifCond}}
+      </div>
+    </div>
+    <div class="card">
+      <h5 class="card-header">
+        {{user.FavoritedRestaurants.length}} 收藏的餐廳
+      </h5>
+      <div class="card-body d-flex flex-wrap">
+        {{#each user.FavoritedRestaurants}}
+        <a href="/restaurants/{{this.dataValues.id}}">
+          <img src="{{this.dataValues.image}}" style="max-width: 60px" class="m-1">
+        </a>
+        {{/each}}
+        {{#ifCond user.FavoritedRestaurants.length 0}} <p>目前沒有收藏任何餐廳</p> {{/ifCond}}
+      </div>
+    </div>
+  </div>
 </div>
